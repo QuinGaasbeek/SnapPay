@@ -1,0 +1,1 @@
+components.loan-status-bade

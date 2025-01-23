@@ -14,8 +14,10 @@
             <div class="bg-white/10 backdrop-blur-md rounded-2xl shadow-xl p-6 mb-8">
                 <div class="flex flex-col md:flex-row justify-between items-center">
                     <div>
-                        <p class="text-xl mb-2">Je IBAN:</p>
-                        <p class="text-2xl font-semibold">{{ user.iban }}</p>
+                      <bank-card
+                          :iban="user.iban"
+                          :name="`${user.first_name[0]}. ${user.last_name}`"
+                      />
                     </div>
                     <div class="mt-4 md:mt-0 space-x-4">
                         <button class="bg-white text-[#0A2463] px-6 py-3 rounded-full font-medium hover:bg-opacity-90 transition-all duration-300">

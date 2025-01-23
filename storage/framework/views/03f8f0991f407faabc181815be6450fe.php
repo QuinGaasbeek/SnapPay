@@ -1,0 +1,1 @@
+components.loan-status-bade<?php /**PATH /Users/quingaasbeek/PhpstormProjects/SnapPayApplication/storage/framework/views/0e6ff9d776fdabcfbe313c2f5a16ec74.blade.php ENDPATH**/ ?>

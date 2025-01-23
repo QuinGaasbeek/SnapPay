@@ -56,7 +56,7 @@
             <div class="absolute bottom-1/3 left-1/4 w-40 h-40 bg-white/5 rounded-3xl transform rotate-12 animate-float-slow" style="animation-delay: 1s;"></div>
         </div>
 
-        <div class="md:mt-16 mt-0 max-w-7xl mx-auto relative z-10">
+        <div class="md:mt-16 md:mb-0 mb-32 mt-0 max-w-7xl mx-auto relative z-10">
             <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center">
                 <h1 class="text-3xl font-extrabold text-white mb-4 sm:mb-0">
                     Leningen Overzicht
@@ -81,18 +81,30 @@
                             <?php $__empty_1 = true; $__currentLoopData = $myLoans; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $loan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                 <div class="loan-card bg-white/20 backdrop-blur-md rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:bg-white/30">
                                     <div class="p-4">
-                                        <div class="flex justify-between items-start mb-2">
+                                        <div class="flex flex-col md:flex-row justify-between items-start mb-2">
                                             <h3 class="text-lg font-semibold text-white"><?php echo e($loan->title); ?></h3>
-                                            <span class="px-2 py-1 text-xs font-semibold rounded-full
-                                                <?php if($loan->status === \App\Enums\LoanStatusses::ACCEPTED): ?> bg-green-400 text-[#0A2463]
-                                                <?php elseif($loan->status === \App\Enums\LoanStatusses::PENDING): ?> bg-blue-400 text-[#0A2463]
-                                                <?php elseif($loan->status === \App\Enums\LoanStatusses::OVERDUE): ?> bg-red-400 text-[#0A2463]
-                                                <?php elseif($loan->status === \App\Enums\LoanStatusses::REPAID): ?> bg-green-400 text-[#0A2463]
-                                                <?php else: ?> bg-yellow-400 text-[#0A2463]
-                                                <?php endif; ?>">
-                                                <?php echo e($loan->status->label()); ?>
-
-                                            </span>
+                                            <div class="md:mt-0 mt-2">
+                                                <?php if (isset($component)) { $__componentOriginal103d910317eb47c35abee0f3e8856743 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal103d910317eb47c35abee0f3e8856743 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.loan-status-badge','data' => ['status' => $loan->status]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('loan-status-badge'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['status' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($loan->status)]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal103d910317eb47c35abee0f3e8856743)): ?>
+<?php $attributes = $__attributesOriginal103d910317eb47c35abee0f3e8856743; ?>
+<?php unset($__attributesOriginal103d910317eb47c35abee0f3e8856743); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal103d910317eb47c35abee0f3e8856743)): ?>
+<?php $component = $__componentOriginal103d910317eb47c35abee0f3e8856743; ?>
+<?php unset($__componentOriginal103d910317eb47c35abee0f3e8856743); ?>
+<?php endif; ?>
+                                            </div>
                                         </div>
                                         <p class="text-2xl font-bold text-white mb-2">€<?php echo e(number_format($loan->amount, 2, ',', '.')); ?></p>
                                         <div class="flex justify-between text-sm text-white/80 mb-2">
@@ -104,15 +116,15 @@
                                         <?php endif; ?>
                                         <div class="flex justify-between items-center mt-4">
                                             <?php if(!$loan->loaner_id): ?>
-                                            <button class="text-white bg-[#3E92CC] hover:bg-[#0A2463] transition-colors duration-200 flex items-center px-3 py-1 rounded-full">
+                                            <a href="<?php echo e(route('loans.invite', $loan)); ?>" class="text-white bg-[#3E92CC] hover:bg-[#0A2463] transition-colors duration-200 flex items-center px-3 py-1 rounded-full">
                                                 <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
                                                 </svg>
                                                 Uitnodigen
-                                            </button>
+                                            </a>
                                             <?php endif; ?>
                                             <div class="flex space-x-2 ml-auto ">
-                                                <a  class="p-2 bg-[#3E92CC] text-white rounded-full hover:bg-[#0A2463] transition-colors duration-200">
+                                                <a  href="<?php echo e(route('loans.show', $loan->id)); ?>" class="p-2 bg-[#3E92CC] text-white rounded-full hover:bg-[#0A2463] transition-colors duration-200">
                                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
@@ -156,18 +168,30 @@
                             <?php $__empty_1 = true; $__currentLoopData = $givenLoans; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $loan): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                                 <div class="loan-card bg-white/20 backdrop-blur-md rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:bg-white/30">
                                     <div class="p-4">
-                                        <div class="flex justify-between items-start mb-2">
+                                        <div class="flex flex-col md:flex-row justify-between items-start mb-2">
                                             <h3 class="text-lg font-semibold text-white"><?php echo e($loan->title); ?></h3>
-                                            <span class="px-2 py-1 text-xs font-semibold rounded-full
-                                                <?php if($loan->status === \App\Enums\LoanStatusses::ACCEPTED): ?> bg-green-400 text-[#0A2463]
-                                                <?php elseif($loan->status === \App\Enums\LoanStatusses::PENDING): ?> bg-blue-400 text-[#0A2463]
-                                                <?php elseif($loan->status === \App\Enums\LoanStatusses::OVERDUE): ?> bg-red-400 text-[#0A2463]
-                                                <?php elseif($loan->status === \App\Enums\LoanStatusses::REPAID): ?> bg-green-400 text-[#0A2463]
-                                                <?php else: ?> bg-yellow-400 text-[#0A2463]
-                                                <?php endif; ?>">
-                                                <?php echo e($loan->status->label()); ?>
-
-                                            </span>
+                                            <div class="md:mt-0 mt-2">
+                                                <?php if (isset($component)) { $__componentOriginal103d910317eb47c35abee0f3e8856743 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal103d910317eb47c35abee0f3e8856743 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.loan-status-badge','data' => ['status' => $loan->status]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('loan-status-badge'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['status' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($loan->status)]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal103d910317eb47c35abee0f3e8856743)): ?>
+<?php $attributes = $__attributesOriginal103d910317eb47c35abee0f3e8856743; ?>
+<?php unset($__attributesOriginal103d910317eb47c35abee0f3e8856743); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal103d910317eb47c35abee0f3e8856743)): ?>
+<?php $component = $__componentOriginal103d910317eb47c35abee0f3e8856743; ?>
+<?php unset($__componentOriginal103d910317eb47c35abee0f3e8856743); ?>
+<?php endif; ?>
+                                            </div>
                                         </div>
                                         <p class="text-2xl font-bold text-white mb-2">€<?php echo e(number_format($loan->amount, 2, ',', '.')); ?></p>
                                         <div class="flex justify-between text-sm text-white/80 mb-2">
@@ -179,7 +203,7 @@
                                         <?php endif; ?>
                                         <div class="flex justify-between items-center mt-4">
                                             <div class="flex space-x-2 ml-auto">
-                                                <a  class="p-2 bg-[#3E92CC] text-white rounded-full hover:bg-[#0A2463] transition-colors duration-200">
+                                                <a href="<?php echo e(route('loans.show', $loan->id)); ?>" class="p-2 bg-[#3E92CC] text-white rounded-full hover:bg-[#0A2463] transition-colors duration-200">
                                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>

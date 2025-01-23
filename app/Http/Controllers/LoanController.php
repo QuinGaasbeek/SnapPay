@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\LoanInviteNewUserMail;
 use App\Models\Loan;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class LoanController extends Controller
 {
@@ -60,7 +63,60 @@ class LoanController extends Controller
 
     public function show(Loan $loan)
     {
+        $installments = json_decode($loan->installments, true);
+        $paymentSchedule = $this->calculatePaymentSchedule($loan);
+
+        return view('loans.show', compact('loan', 'installments', 'paymentSchedule'));
     }
+
+    private function calculatePaymentSchedule(Loan $loan)
+    {
+        $installmentsData = json_decode($loan->installments, true) ?? [];
+
+        $totalPaid = 0.0;
+        foreach ($installmentsData as $installment) {
+            $totalPaid += floatval($installment['amount'] ?? 0);
+        }
+
+        $schedule = [];
+        $startDate = Carbon::parse($loan->start_date);
+        $needToPayPerPeriod = $loan->amount / $loan->period_count;
+
+        $remainingPaid = $totalPaid;
+
+        for ($i = 0; $i < $loan->period_count; $i++) {
+            if ($loan->period === 'months') {
+                $dueDate = $startDate->copy()->addMonths($i);
+            } elseif ($loan->period === 'weeks') {
+                $dueDate = $startDate->copy()->addWeeks($i);
+            } else {
+                continue;
+            }
+
+            $allocated = min($remainingPaid, $needToPayPerPeriod);
+            $remainingPaid -= $allocated;
+
+            if ($allocated >= $needToPayPerPeriod) {
+                $status = 'Betaald';
+            } else {
+                if ($dueDate->isPast()) {
+                    $status = 'Achterstallig';
+                } else {
+                    $status = 'Open';
+                }
+            }
+
+            $schedule[] = [
+                'due_date'    => $dueDate->format('Y-m-d'),
+                'need_to_pay' => round($needToPayPerPeriod, 2),
+                'amount'      => round($allocated, 2),
+                'status'      => $status,
+            ];
+        }
+
+        return $schedule;
+    }
+
 
     public function edit(Loan $loan)
     {
@@ -72,5 +128,51 @@ class LoanController extends Controller
 
     public function destroy(Loan $loan)
     {
+    }
+    public function invite(Loan $loan)
+    {
+        return view('loans.invite', compact('loan'));
+    }
+
+    public function checkUser(Request $request, Loan $loan)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if ($user) {
+            return redirect()->route('loans.invite', $loan)->with('user_status', [
+                'exists' => true,
+                'email' => $request->email,
+                'message' => 'Gebruiker gevonden. Klik op uitnodigen om te bevestigen.'
+            ]);
+        } else {
+            return redirect()->route('loans.invite', $loan)->with('user_status', [
+                'exists' => false,
+                'email' => $request->email,
+                'message' => 'Nieuwe gebruiker. Wilt u deze persoon uitnodigen voor uw lening en SnapPay?'
+            ]);
+        }
+    }
+
+    public function sendInvite(Request $request, Loan $loan)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if ($user) {
+            Mail::to($user)->send(new ExistingUserInvitation($loan));
+
+            return redirect()->route('loans.show', $loan)->with('status', 'Uitnodiging verzonden naar bestaande gebruiker.');
+        } else {
+            Mail::to($request->email)->send(new LoanInviteNewUserMail($loan, $request->email));
+
+            return redirect()->route('loans.show', $loan)->with('status', 'Nieuwe gebruiker uitgenodigd en gekoppeld aan de lening.');
+        }
     }
 }
