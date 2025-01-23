@@ -84,13 +84,13 @@
                                         <div class="flex justify-between items-start mb-2">
                                             <h3 class="text-lg font-semibold text-white"><?php echo e($loan->title); ?></h3>
                                             <span class="px-2 py-1 text-xs font-semibold rounded-full
-                                                <?php if($loan->status == \App\Enums\LoanStatusses::ACCEPTED->value): ?> bg-green-400 text-[#0A2463]
-                                                <?php elseif($loan->status == \App\Enums\LoanStatusses::PENDING->value): ?> bg-blue-400 text-[#0A2463]
-                                                <?php elseif($loan->status == \App\Enums\LoanStatusses::OVERDUE->value): ?> bg-red-400 text-[#0A2463]
-                                                <?php elseif($loan->status == \App\Enums\LoanStatusses::REPAID->value): ?> bg-green-400 text-[#0A2463]
+                                                <?php if($loan->status === \App\Enums\LoanStatusses::ACCEPTED): ?> bg-green-400 text-[#0A2463]
+                                                <?php elseif($loan->status === \App\Enums\LoanStatusses::PENDING): ?> bg-blue-400 text-[#0A2463]
+                                                <?php elseif($loan->status === \App\Enums\LoanStatusses::OVERDUE): ?> bg-red-400 text-[#0A2463]
+                                                <?php elseif($loan->status === \App\Enums\LoanStatusses::REPAID): ?> bg-green-400 text-[#0A2463]
                                                 <?php else: ?> bg-yellow-400 text-[#0A2463]
                                                 <?php endif; ?>">
-                                                <?php echo e($loan->status); ?>
+                                                <?php echo e($loan->status->label()); ?>
 
                                             </span>
                                         </div>
@@ -159,13 +159,13 @@
                                         <div class="flex justify-between items-start mb-2">
                                             <h3 class="text-lg font-semibold text-white"><?php echo e($loan->title); ?></h3>
                                             <span class="px-2 py-1 text-xs font-semibold rounded-full
-                                                <?php if($loan->status == \App\Enums\LoanStatusses::ACCEPTED->value): ?> bg-green-400 text-[#0A2463]
-                                                <?php elseif($loan->status == \App\Enums\LoanStatusses::PENDING->value): ?> bg-blue-400 text-[#0A2463]
-                                                <?php elseif($loan->status == \App\Enums\LoanStatusses::OVERDUE->value): ?> bg-red-400 text-[#0A2463]
-                                                <?php elseif($loan->status == \App\Enums\LoanStatusses::REPAID->value): ?> bg-green-400 text-[#0A2463]
+                                                <?php if($loan->status === \App\Enums\LoanStatusses::ACCEPTED): ?> bg-green-400 text-[#0A2463]
+                                                <?php elseif($loan->status === \App\Enums\LoanStatusses::PENDING): ?> bg-blue-400 text-[#0A2463]
+                                                <?php elseif($loan->status === \App\Enums\LoanStatusses::OVERDUE): ?> bg-red-400 text-[#0A2463]
+                                                <?php elseif($loan->status === \App\Enums\LoanStatusses::REPAID): ?> bg-green-400 text-[#0A2463]
                                                 <?php else: ?> bg-yellow-400 text-[#0A2463]
                                                 <?php endif; ?>">
-                                                <?php echo e($loan->status); ?>
+                                                <?php echo e($loan->status->label()); ?>
 
                                             </span>
                                         </div>

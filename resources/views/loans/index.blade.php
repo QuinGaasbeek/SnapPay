@@ -37,13 +37,13 @@
                                         <div class="flex justify-between items-start mb-2">
                                             <h3 class="text-lg font-semibold text-white">{{ $loan->title }}</h3>
                                             <span class="px-2 py-1 text-xs font-semibold rounded-full
-                                                @if($loan->status == \App\Enums\LoanStatusses::ACCEPTED->value) bg-green-400 text-[#0A2463]
-                                                @elseif($loan->status == \App\Enums\LoanStatusses::PENDING->value) bg-blue-400 text-[#0A2463]
-                                                @elseif($loan->status == \App\Enums\LoanStatusses::OVERDUE->value) bg-red-400 text-[#0A2463]
-                                                @elseif($loan->status == \App\Enums\LoanStatusses::REPAID->value) bg-green-400 text-[#0A2463]
+                                                @if ($loan->status === \App\Enums\LoanStatusses::ACCEPTED) bg-green-400 text-[#0A2463]
+                                                @elseif ($loan->status === \App\Enums\LoanStatusses::PENDING) bg-blue-400 text-[#0A2463]
+                                                @elseif ($loan->status === \App\Enums\LoanStatusses::OVERDUE) bg-red-400 text-[#0A2463]
+                                                @elseif ($loan->status === \App\Enums\LoanStatusses::REPAID) bg-green-400 text-[#0A2463]
                                                 @else bg-yellow-400 text-[#0A2463]
                                                 @endif">
-                                                {{ $loan->status }}
+                                                {{ $loan->status->label() }}
                                             </span>
                                         </div>
                                         <p class="text-2xl font-bold text-white mb-2">€{{ number_format($loan->amount, 2, ',', '.') }}</p>
@@ -110,13 +110,13 @@
                                         <div class="flex justify-between items-start mb-2">
                                             <h3 class="text-lg font-semibold text-white">{{ $loan->title }}</h3>
                                             <span class="px-2 py-1 text-xs font-semibold rounded-full
-                                                @if($loan->status == \App\Enums\LoanStatusses::ACCEPTED->value) bg-green-400 text-[#0A2463]
-                                                @elseif($loan->status == \App\Enums\LoanStatusses::PENDING->value) bg-blue-400 text-[#0A2463]
-                                                @elseif($loan->status == \App\Enums\LoanStatusses::OVERDUE->value) bg-red-400 text-[#0A2463]
-                                                @elseif($loan->status == \App\Enums\LoanStatusses::REPAID->value) bg-green-400 text-[#0A2463]
+                                                @if ($loan->status === \App\Enums\LoanStatusses::ACCEPTED) bg-green-400 text-[#0A2463]
+                                                @elseif ($loan->status === \App\Enums\LoanStatusses::PENDING) bg-blue-400 text-[#0A2463]
+                                                @elseif ($loan->status === \App\Enums\LoanStatusses::OVERDUE) bg-red-400 text-[#0A2463]
+                                                @elseif ($loan->status === \App\Enums\LoanStatusses::REPAID) bg-green-400 text-[#0A2463]
                                                 @else bg-yellow-400 text-[#0A2463]
                                                 @endif">
-                                                {{ $loan->status }}
+                                                {{ $loan->status->label() }}
                                             </span>
                                         </div>
                                         <p class="text-2xl font-bold text-white mb-2">€{{ number_format($loan->amount, 2, ',', '.') }}</p>

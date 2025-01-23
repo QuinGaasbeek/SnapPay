@@ -11,6 +11,6 @@ enum LoanStatusses: string
 
     public function label(): string
     {
-        return __('loans.' . $this->value);
+        return __('app.loans.' . $this->value);
     }
 }
