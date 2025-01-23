@@ -16,22 +16,22 @@
                 <a href="#unique-features" class="text-white/90 hover:text-white transition-colors duration-300">Unieke Functies</a>
                 <a href="#contact" class="text-white/90 hover:text-white transition-colors duration-300">Contact</a>
 
-                @guest
-                    <a href="{{ route('login') }}" class="text-white/90 hover:text-white transition-colors duration-300">Inloggen</a>
-                    <a href="{{ route('register') }}" class="bg-white text-[#0A2463] px-6 py-2 rounded-full font-medium hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105">
+                <?php if(auth()->guard()->guest()): ?>
+                    <a href="<?php echo e(route('login')); ?>" class="text-white/90 hover:text-white transition-colors duration-300">Inloggen</a>
+                    <a href="<?php echo e(route('register')); ?>" class="bg-white text-[#0A2463] px-6 py-2 rounded-full font-medium hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105">
                         Registreer Nu
                     </a>
-                @else
-                    <a href="{{ route('dashboard') }}" class="block px-4 py-2 rounded-full text-base font-medium text-white border border-white hover:bg-white hover:text-[#0A2463] transition-all duration-300">
+                <?php else: ?>
+                    <a href="<?php echo e(route('dashboard')); ?>" class="block px-4 py-2 rounded-full text-base font-medium text-white border border-white hover:bg-white hover:text-[#0A2463] transition-all duration-300">
                         Dashboard
                     </a>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
+                    <form method="POST" action="<?php echo e(route('logout')); ?>">
+                        <?php echo csrf_field(); ?>
                         <button type="submit" class="bg-white text-[#0A2463] px-6 py-2 rounded-full font-medium hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105">
                             Uitloggen
                         </button>
                     </form>
-                @endguest
+                <?php endif; ?>
             </div>
 
             <!-- Mobile menu button -->
@@ -70,24 +70,24 @@
                 <a href="#unique-features" class="mobile-menu-item block px-3 py-2 rounded-md text-base font-medium text-white/90 hover:text-white hover:bg-white/10">Unieke Functies</a>
                 <a href="#contact" class="mobile-menu-item block px-3 py-2 rounded-md text-base font-medium text-white/90 hover:text-white hover:bg-white/10">Contact</a>
 
-                @guest
-                    <a href="{{ route('login') }}" class="mobile-menu-item block px-4 py-2 rounded-full text-base font-medium text-white border border-white hover:bg-white hover:text-[#0A2463] transition-all duration-300">
+                <?php if(auth()->guard()->guest()): ?>
+                    <a href="<?php echo e(route('login')); ?>" class="mobile-menu-item block px-4 py-2 rounded-full text-base font-medium text-white border border-white hover:bg-white hover:text-[#0A2463] transition-all duration-300">
                         Inloggen
                     </a>
-                    <a href="{{ route('register') }}" class="mobile-menu-item block w-full text-center bg-white text-[#0A2463] px-4 py-2 rounded-full font-medium hover:bg-opacity-90 transition-all duration-300">
+                    <a href="<?php echo e(route('register')); ?>" class="mobile-menu-item block w-full text-center bg-white text-[#0A2463] px-4 py-2 rounded-full font-medium hover:bg-opacity-90 transition-all duration-300">
                         Registreer Nu
                     </a>
-                @else
-                    <a href="{{ route('dashboard') }}" class="mobile-menu-item block px-4 py-2 rounded-full text-base font-medium text-white border border-white hover:bg-white hover:text-[#0A2463] transition-all duration-300">
+                <?php else: ?>
+                    <a href="<?php echo e(route('dashboard')); ?>" class="mobile-menu-item block px-4 py-2 rounded-full text-base font-medium text-white border border-white hover:bg-white hover:text-[#0A2463] transition-all duration-300">
                         Dashboard
                     </a>
-                    <form method="POST" action="{{ route('logout') }}" id="logout-form">
-                        @csrf
+                    <form method="POST" action="<?php echo e(route('logout')); ?>" id="logout-form">
+                        <?php echo csrf_field(); ?>
                         <button type="submit" class="mobile-menu-item block w-full text-center bg-white text-[#0A2463] px-4 py-2 rounded-full font-medium hover:bg-opacity-90 transition-all duration-300 mt-4">
                             Uitloggen
                         </button>
                     </form>
-                @endguest
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -131,3 +131,4 @@
     });
 </script>
 
+<?php /**PATH /Users/quingaasbeek/PhpstormProjects/SnapPayApplication/resources/views/components/navigation.blade.php ENDPATH**/ ?>

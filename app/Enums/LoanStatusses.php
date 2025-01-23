@@ -8,4 +8,9 @@ enum LoanStatusses: string
     case ACCEPTED = 'accepted';
     case REPAID = 'repaid';
     case OVERDUE = 'overdue';
+
+    public function label(): string
+    {
+        return __('loans.' . $this->value);
+    }
 }

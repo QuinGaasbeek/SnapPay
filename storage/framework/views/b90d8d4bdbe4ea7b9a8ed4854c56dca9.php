@@ -8,7 +8,7 @@
             </div>
 
             <div class="flex space-x-8">
-                <a href="{{ route('dashboard') }}"
+                <a href="<?php echo e(route('dashboard')); ?>"
                    class="flex items-center text-white/90 hover:text-white transition-colors duration-300 group">
                     <svg xmlns="http://www.w3.org/2000/svg"
                          class="h-5 w-5 mr-2"
@@ -38,7 +38,7 @@
                     Potjes
                 </a>
 
-                <a href="{{ route('loans') }}"
+                <a href="<?php echo e(route('loans')); ?>"
                    class="flex items-center text-white/90 hover:text-white transition-colors duration-300">
                     <svg xmlns="http://www.w3.org/2000/svg"
                          class="h-5 w-5 mr-2"
@@ -55,8 +55,8 @@
             </div>
 
             <!-- Uitloggen voor desktop -->
-            <form method="POST" action="{{ route('logout') }}" class="flex items-center">
-                @csrf
+            <form method="POST" action="<?php echo e(route('logout')); ?>" class="flex items-center">
+                <?php echo csrf_field(); ?>
                 <button type="submit"
                         class="flex items-center text-white/90 hover:text-white transition-colors duration-300">
                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -75,3 +75,4 @@
         </div>
     </div>
 </nav>
+<?php /**PATH /Users/quingaasbeek/PhpstormProjects/SnapPayApplication/resources/views/components/dashboard-navigation.blade.php ENDPATH**/ ?>

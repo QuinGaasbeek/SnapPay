@@ -51,7 +51,7 @@
         <div class="bg-white/95 backdrop-blur-xl rounded-2xl shadow-[0_20px_50px_rgba(8,_112,_184,_0.5)] overflow-hidden p-6 sm:p-8">
             <div class="text-center mb-6 sm:mb-8 relative">
 
-                <img src="https://cdn.discordapp.com/attachments/1331273355118247936/1331277862338166794/Untitled_design_1.png?ex=6791b160&is=67905fe0&hm=99896016ada111a54a1bc8142356eebe7dab960f4221c63b83113ecf17f1ef57&" alt="SnapPay Logo" class="h-12 sm:h-14 mx-auto mb-4 sm:mb-6">
+                <img src="https://cdn.discordapp.com/attachments/1331273355118247936/1331277862338166794/Untitled_design_1.png?ex=679302e0&is=6791b160&hm=56d8433868cffa9c4c014d603ddee6048245ecbd4e65c469905c1f5b5f21224d&" alt="SnapPay Logo" class="h-12 sm:h-14 mx-auto mb-4 sm:mb-6">
                 <h2 class="text-2xl sm:text-[1.75rem] font-bold bg-gradient-to-r from-[#1a237e] to-[#2962ff] bg-clip-text text-transparent">Welkom terug bij SnapPay</h2>
                 <p class="text-gray-600 mt-2 text-sm sm:text-base">Log in om je leningen te beheren</p>
             </div>

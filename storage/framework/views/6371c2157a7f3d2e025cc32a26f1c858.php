@@ -1,4 +1,4 @@
-@vite(['resources/css/app.css', 'resources/js/app.js'])
+<?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
 
 <div class="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-[#1a237e] via-[#1e3fb5] to-[#2962ff] px-4 sm:px-6">
     <!-- Enhanced Decorative Background Elements -->
@@ -9,11 +9,11 @@
         <div class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-[#2962ff]/30 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-4000"></div>
 
         <!-- Floating Elements -->
-        @for ($i = 0; $i < 5; $i++)
+        <?php for($i = 0; $i < 5; $i++): ?>
             <div class="absolute bg-white/10 rounded-lg blur-sm animate-float"
-                 style="top: {{ rand(0, 100) }}%; left: {{ rand(0, 100) }}%; width: {{ rand(20, 60) }}px; height: {{ rand(20, 60) }}px; animation-delay: {{ rand(0, 5) }}s;">
+                 style="top: <?php echo e(rand(0, 100)); ?>%; left: <?php echo e(rand(0, 100)); ?>%; width: <?php echo e(rand(20, 60)); ?>px; height: <?php echo e(rand(20, 60)); ?>px; animation-delay: <?php echo e(rand(0, 5)); ?>s;">
             </div>
-        @endfor
+        <?php endfor; ?>
     </div>
 
     <div class="w-full max-w-[480px] relative z-10">
@@ -24,8 +24,8 @@
                 <p class="text-gray-600 mt-2">Vul je gegevens in om te beginnen</p>
             </div>
 
-            <form method="POST" action="{{ route('register') }}" class="space-y-6">
-                @csrf
+            <form method="POST" action="<?php echo e(route('register')); ?>" class="space-y-6">
+                <?php echo csrf_field(); ?>
 
                 <!-- First Name -->
                 <div class="space-y-2">
@@ -39,12 +39,19 @@
                             required
                             class="relative block w-full px-4 py-3 bg-white border-0 rounded-xl text-gray-700 text-sm shadow-sm ring-1 ring-gray-200 transition-all duration-300 placeholder-gray-400 focus:ring-2 focus:ring-[#2962ff] group-hover:ring-[#1a237e]/50"
                             placeholder="John"
-                            value="{{ old('first_name') }}"
+                            value="<?php echo e(old('first_name')); ?>"
                         />
                     </div>
-                    @error('first_name')
-                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                    <?php $__errorArgs = ['first_name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                    <p class="mt-2 text-sm text-red-600"><?php echo e($message); ?></p>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 </div>
 
                 <!-- Last Name -->
@@ -59,12 +66,19 @@
                             required
                             class="relative block w-full px-4 py-3 bg-white border-0 rounded-xl text-gray-700 text-sm shadow-sm ring-1 ring-gray-200 transition-all duration-300 placeholder-gray-400 focus:ring-2 focus:ring-[#2962ff] group-hover:ring-[#1a237e]/50"
                             placeholder="Doe"
-                            value="{{ old('last_name') }}"
+                            value="<?php echo e(old('last_name')); ?>"
                         />
                     </div>
-                    @error('last_name')
-                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                    <?php $__errorArgs = ['last_name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                    <p class="mt-2 text-sm text-red-600"><?php echo e($message); ?></p>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 </div>
 
                 <!-- Email Address -->
@@ -79,12 +93,19 @@
                             required
                             class="relative block w-full px-4 py-3 bg-white border-0 rounded-xl text-gray-700 text-sm shadow-sm ring-1 ring-gray-200 transition-all duration-300 placeholder-gray-400 focus:ring-2 focus:ring-[#2962ff] group-hover:ring-[#1a237e]/50"
                             placeholder="john@example.com"
-                            value="{{ old('email') }}"
+                            value="<?php echo e(old('email')); ?>"
                         />
                     </div>
-                    @error('email')
-                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                    <?php $__errorArgs = ['email'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                    <p class="mt-2 text-sm text-red-600"><?php echo e($message); ?></p>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 </div>
 
                 <!-- IBAN -->
@@ -99,12 +120,19 @@
                             required
                             class="relative block w-full px-4 py-3 bg-white border-0 rounded-xl text-gray-700 text-sm shadow-sm ring-1 ring-gray-200 transition-all duration-300 placeholder-gray-400 focus:ring-2 focus:ring-[#2962ff] group-hover:ring-[#1a237e]/50"
                             placeholder="NL91ABNA0417164300"
-                            value="{{ old('iban') }}"
+                            value="<?php echo e(old('iban')); ?>"
                         />
                     </div>
-                    @error('iban')
-                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                    <?php $__errorArgs = ['iban'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                    <p class="mt-2 text-sm text-red-600"><?php echo e($message); ?></p>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 </div>
 
                 <!-- Password -->
@@ -121,9 +149,16 @@
                             placeholder="••••••••"
                         />
                     </div>
-                    @error('password')
-                    <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                    <?php $__errorArgs = ['password'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                    <p class="mt-2 text-sm text-red-600"><?php echo e($message); ?></p>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 </div>
 
                 <!-- Confirm Password -->
@@ -165,7 +200,7 @@
             <div class="mt-8 text-center">
                 <p class="text-sm text-gray-600">
                     Heb je al een account?
-                    <a href="{{ route('login') }}" class="font-medium text-[#2962ff] hover:text-[#1a237e] transition-colors duration-300 ml-1">
+                    <a href="<?php echo e(route('login')); ?>" class="font-medium text-[#2962ff] hover:text-[#1a237e] transition-colors duration-300 ml-1">
                         Log hier in
                     </a>
                 </p>
@@ -174,7 +209,7 @@
     </div>
 </div>
 
-@push('styles')
+<?php $__env->startPush('styles'); ?>
     <style>
         @keyframes float {
             0%, 100% { transform: translateY(0) rotate(0deg); }
@@ -199,4 +234,5 @@
             animation-delay: 4s;
         }
     </style>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php /**PATH /Users/quingaasbeek/PhpstormProjects/SnapPayApplication/resources/views/auth/register.blade.php ENDPATH**/ ?>
