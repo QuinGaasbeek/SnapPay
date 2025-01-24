@@ -3,19 +3,32 @@
     <h3 class="text-2xl font-bold text-white mb-6">Leningdetails</h3>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="col-span-1 md:col-span-2">
-        <div class="bg-white/20 rounded-xl p-4 flex items-center justify-between">
-          <span class="text-white/80 text-lg">Totaal bedrag</span>
-          <span class="text-white text-2xl font-bold">{{ formattedAmount }}</span>
+        <div class="bg-white/20 rounded-xl p-4 space-y-4">
+          <template v-if="loan.interest_rate > 0">
+            <div class="flex items-center justify-between">
+              <span class="text-white/80 text-lg">Oorspronkelijk bedrag</span>
+              <span class="text-white text-2xl font-bold">{{ formatCurrency(loan.amount) }}</span>
+            </div>
+            <div class="h-px bg-white/10"></div>
+            <div class="flex items-center justify-between">
+              <span class="text-white/80 text-lg">Totaal bedrag (incl. rente)</span>
+              <span class="text-white text-2xl font-bold">{{ formatCurrency(totalAmount) }}</span>
+            </div>
+          </template>
+          <template v-else>
+            <div class="flex items-center justify-between">
+              <span class="text-white/80 text-lg">Totaal bedrag</span>
+              <span class="text-white text-2xl font-bold">{{ formatCurrency(loan.amount) }}</span>
+            </div>
+          </template>
         </div>
       </div>
-      <!-- Interest Rate and Duration -->
       <div v-for="(detail, key) in basicDetails" :key="key" class="detail-item bg-white/5 rounded-xl p-4 transition-all duration-300 hover:bg-white/10">
         <div class="flex items-center justify-between">
           <span class="text-white/70">{{ detail.label }}</span>
           <span class="text-white font-medium">{{ detail.value }}</span>
         </div>
       </div>
-      <!-- Dates Section - Full Width -->
       <div class="col-span-1 md:col-span-2 bg-white/5 rounded-xl p-4">
         <div class="space-y-4">
           <div class="flex items-center justify-between">
@@ -26,7 +39,7 @@
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2">
               <span class="text-white/70">Einddatum</span>
-              <span v-if="isExpectedEndDate" class="bg-white/20 text-white/60 text-xs px-2 py-1 rounded-full">
+              <span v-if="!loan.end_date" class="bg-white/20 text-white/60 text-xs px-2 py-1 rounded-full">
                 Verwacht
               </span>
             </div>
@@ -91,46 +104,64 @@ export default {
     };
 
     const formatDate = (dateString) => {
-      return dateString ? new Date(dateString).toLocaleDateString('nl-NL', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Niet bepaald';
+      return dateString
+          ? new Date(dateString).toLocaleDateString('nl-NL', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+          })
+          : 'Niet bepaald';
     };
 
     const capitalizeFirstLetter = (string) => {
       return string.charAt(0).toUpperCase() + string.slice(1);
     };
 
-    const calculateExpectedEndDate = () => {
-      if (!props.loan.start_date) return null;
+    // Bereken het totale bedrag inclusief rente
+    const totalAmount = computed(() => {
+      if (!props.loan.interest_rate || props.loan.interest_rate <= 0) return props.loan.amount;
 
-      const startDate = new Date(props.loan.start_date);
-      const periodCount = props.loan.period_count;
-      const period = props.loan.period;
+      // Formule: Total = Loan Amount * (1 + Interest Rate / 100)
+      const totalWithInterest = props.loan.amount * (1 + props.loan.interest_rate / 100);
 
-      if (period === 'months') {
-        return new Date(startDate.setMonth(startDate.getMonth() + periodCount));
-      } else if (period === 'weeks') {
-        return new Date(startDate.setDate(startDate.getDate() + (periodCount * 7)));
-      }
-      return null;
-    };
+      // Afronden naar 2 decimalen
+      return Math.round(totalWithInterest * 100) / 100;
+    });
 
-    const formattedAmount = computed(() => formatCurrency(props.loan.amount));
+    // Bereken het bedrag per termijn
+    const amountPerPeriod = computed(() => {
+      if (!props.loan.period_count || props.loan.period_count <= 0) return 'N/A';
 
-    const isExpectedEndDate = computed(() => !props.loan.end_date);
+      const perPeriodAmount = totalAmount.value / props.loan.period_count;
+
+      // Afronden naar 2 decimalen
+      return formatCurrency(Math.round(perPeriodAmount * 100) / 100);
+    });
 
     const endDateDisplay = computed(() => {
       if (props.loan.end_date) {
         return formatDate(props.loan.end_date);
       }
-      const expectedDate = calculateExpectedEndDate();
-      return expectedDate ? formatDate(expectedDate) : 'Niet bepaald';
+      const startDate = new Date(props.loan.start_date);
+      if (props.loan.period === 'months') {
+        startDate.setMonth(startDate.getMonth() + props.loan.period_count);
+      } else {
+        startDate.setDate(startDate.getDate() + props.loan.period_count * 7);
+      }
+      return formatDate(startDate);
     });
 
     const basicDetails = computed(() => ({
-      interestRate: { label: 'Rente', value: `${props.loan.interest_rate}%` },
+      interestRate: {
+        label: 'Rente',
+        value: `${props.loan.interest_rate}%`
+      },
       duration: {
         label: 'Looptijd',
-        value: `${props.loan.period_count} ${props.loan.period === 'months' ? 'maanden' : 'weken'}`
-      }
+        value: `${props.loan.period_count} ${
+            props.loan.period === 'months' ? 'maanden' : 'weken'
+        }`
+      },
     }));
 
     const statusColor = computed(() => {
@@ -148,19 +179,21 @@ export default {
     };
 
     return {
-      formattedAmount,
-      basicDetails,
-      statusColor,
       showBorrower,
-      toggleBorrower,
+      formatCurrency,
       formatDate,
       capitalizeFirstLetter,
+      totalAmount,
+      amountPerPeriod,
       endDateDisplay,
-      isExpectedEndDate
+      basicDetails,
+      statusColor,
+      toggleBorrower
     };
   }
-}
+};
 </script>
+
 
 <style scoped>
 .loan-details-widget {

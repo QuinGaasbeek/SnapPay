@@ -33,15 +33,12 @@ class LoanController extends Controller
             'amount' => 'required|numeric|min:0',
             'period' => 'required|in:weeks,months',
             'period_count' => 'required|integer|min:1',
-            'loaner_email' => 'required|email',
             'interest_rate' => 'nullable|numeric|min:0|max:100',
         ]);
 
-        $loaner = User::where('email', $request->loaner_email)->first();
-
         $loan = new Loan();
         $loan->owner_id = auth()->user()->id;
-        $loan->loaner_id = $loaner ? $loaner->id : null;
+        $loan->loaner_id = null;
         $loan->title = $request->title;
         $loan->description = $request->description;
         $loan->amount = $request->amount;
@@ -52,14 +49,14 @@ class LoanController extends Controller
         $loan->start_date = now();
         $loan->save();
 
-        if (!$loaner) {
-            // TODO: Implement invitation email logic
-            // For now, we'll just add a flash message
-            session()->flash('message', 'Uitnodiging verzonden naar ' . $request->loaner_email);
+        // Controleer op de actie en stuur door naar de juiste route
+        if ($request->action === 'store_and_invite') {
+            return redirect()->route('loans.invite', $loan)->with('success', 'Lening succesvol aangemaakt en uitnodigen gestart.');
         }
 
         return redirect()->route('loans')->with('success', 'Lening succesvol aangemaakt.');
     }
+
 
     public function show(Loan $loan)
     {
@@ -80,7 +77,10 @@ class LoanController extends Controller
 
         $schedule = [];
         $startDate = Carbon::parse($loan->start_date);
-        $needToPayPerPeriod = $loan->amount / $loan->period_count;
+
+        // Bereken de totale som inclusief rente
+        $totalWithInterest = $loan->amount + ($loan->amount * $loan->interest_rate / 100);
+        $needToPayPerPeriod = $totalWithInterest / $loan->period_count;
 
         $remainingPaid = $totalPaid;
 
@@ -109,13 +109,17 @@ class LoanController extends Controller
             $schedule[] = [
                 'due_date'    => $dueDate->format('Y-m-d'),
                 'need_to_pay' => round($needToPayPerPeriod, 2),
+                'interest'    => round(($loan->amount * $loan->interest_rate / 100) / $loan->period_count, 2),
                 'amount'      => round($allocated, 2),
                 'status'      => $status,
+                'period'      => $loan->period,
             ];
         }
 
         return $schedule;
     }
+
+
 
 
     public function edit(Loan $loan)

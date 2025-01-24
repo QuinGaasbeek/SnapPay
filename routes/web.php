@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LoanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,7 @@ Route::get('/loans/show/{loan}', [\App\Http\Controllers\LoanController::class, '
 Route::get('/loans/{loan}/invite', [\App\Http\Controllers\LoanController::class, 'invite'])->name('loans.invite');
 Route::post('/loans/{loan}/check-user', [\App\Http\Controllers\LoanController::class, 'checkUser'])->name('loans.check-user');
 Route::post('/loans/{loan}/send-invite', [\App\Http\Controllers\LoanController::class, 'sendInvite'])->name('loans.send-invite');
+Route::post('/loans/check-user', [LoanController::class, 'checkUserOnCreate'])->name('loans.check-user-on-create');
 
 
 //Temporary invite link for a loan
